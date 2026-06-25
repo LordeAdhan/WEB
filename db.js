@@ -1,35 +1,33 @@
 const mysql = require('mysql2/promise');
-const cliente = mysql.createPool("mysql://root@localhost:3306/restaurante");
 
-async function listarCliente(){
-    const res = await cliente.query('select * from cliente');
+const client = mysql.createPool('mysql://root@localhost:3306/pessoas');
+
+async function listPessoa(){
+
+    const res = await client.query('SELECT * FROM pessoa');
+
     return res[0];
 };
-
-async function buscarCliente(id){
-    const res = await cliente.query(`select * from cliente where id=${id}`);
-    return res[0];
-};
-
-async function incluirCliente(nome, email, cpf, celular, pix, genero, nascimento){
-    const res = await cliente.query(`insert into (nome, email, cpf, celular, pix, genero, nascimento) values ('${nome}', '${email}', '${cpf}', '${celular}', '${pix}', '${genero}', '${nascimento}')`);
-    return res[0];
-};
-
-async function atualizarCliente(id, nome, email, cpf, celular, pix, genero, nascimento){
-    const res = await cliente.query(`update cliente set nome='${nome}', email='${email}', cpf='${cpf}', celular='${celular}', pix='${pix}', genero='${genero}', nascimento='${nascimento}' where id=${id}`);
-    return res[0];
-};
-
-async function removeCliente(id){
-    const data = await client.query(`delete from cliente where id=${id}`)
+async function buscaPessoa(id){
+    const data = await client.query(`select * from pessoa where id = ${id}`);
     return data[0];
+};
+async function incluiPessoa(nome,email){
+    const data = await client.query(`insert into pessoa (nome, email) values ('${nome}','${email}')`);
+    return data[0];
+};
+async function atualizarPessoa(id, nome, email){
+    const data = await client.query(`update pessoa set nome='${nome}', email='${email}' where id = ${id}`)
+    return data[0];
+};
+async function removePessoa(id){
+    const data = await client.query(`delete from pessoa where id=${id}`)
 };
 
 module.exports = {
-    atualizarCliente,
-    buscarCliente,
-    incluirCliente,
-    listarCliente,
-    removeCliente
-}
+    listPessoa,
+    atualizarPessoa,
+    buscaPessoa,
+    incluiPessoa,
+    removePessoa
+};
